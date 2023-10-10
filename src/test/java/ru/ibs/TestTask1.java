@@ -18,11 +18,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 public class TestTask1 {
-    static WebDriver driver;
-    WebDriverWait driverWait;
-    final String baseUrl = "http://training.appline.ru/user/login";
-    private final String login = "Irina Filippova";
-    final String password = "testing";
+    private WebDriver driver;
+    private WebDriverWait driverWait;
 
 
     @BeforeEach
@@ -38,29 +35,29 @@ public class TestTask1 {
     public void test() {
 
         //Шаги 1-3
-        driver.get(baseUrl);
-        driverWait.until(ExpectedConditions.visibilityOf(driver
-                .findElement(By.xpath("//form[@id='login-form']"))));
+        driver.get("http://training.appline.ru/user/login");
+        waitVisibilityOfElement(By.xpath("//form[@id='login-form']"));
 
-        driver.findElement(By.xpath("//input[@name='_username']")).sendKeys(login);
-        driver.findElement(By.xpath("//input[@name='_password']")).sendKeys(password);
+
+        driver.findElement(By.xpath("//input[@name='_username']")).sendKeys("Irina Filippova");
+        driver.findElement(By.xpath("//input[@name='_password']")).sendKeys("testing");
         driver.findElement(By.xpath("//button[@name='_submit']")).click();
-        driverWait.until(ExpectedConditions.visibilityOf(driver
-                .findElement(By.xpath("//h1[@class='oro-subtitle']"))));
+        waitVisibilityOfElement(By.xpath("//h1[@class='oro-subtitle']"));
+
 
         //Шаг 4
         WebElement dropDownList = driver
                 .findElement(By.xpath("//ul[contains(@class, 'main-menu')]/li/a/span[text()='Расходы']"));
         dropDownList.click();
-        driverWait.until(ExpectedConditions.visibilityOf(dropDownList
-                .findElement(By.xpath("./ancestor::li/ul"))));
+        waitVisibilityOfElement(dropDownList);
 
         driver.findElement(By.xpath("//span[text()='Командировки']")).click();
-        waitSpinner();
+        WebElement spinner = driver.findElement(By.xpath("//div[@class='loader-content']"));
+        waitInvisibilityOfElement(spinner);
 
         //Шаг 5-6
         driver.findElement(By.xpath("//a[@title='Создать командировку']")).click();
-        waitSpinner();
+        waitInvisibilityOfElement(spinner);
         Assertions.assertTrue(driver
                 .findElement(By.xpath("//h1[@class='user-name']")).isDisplayed());
 
@@ -80,17 +77,15 @@ public class TestTask1 {
         Assertions.assertEquals("display: block;", driver
                 .findElement(By.xpath("//div[@id='company-selector']")).getAttribute("style"));
 
-        WebElement arrow = driverWait.until(ExpectedConditions.visibilityOf(driver
-                .findElement(By.xpath("//span[@class='select2-arrow']"))));
-        driverWait.until(ExpectedConditions.visibilityOf(arrow));
+        WebElement arrow = driver.findElement(By.xpath("//span[@class='select2-arrow']"));
+        waitVisibilityOfElement(arrow);
 
         driver
                 .findElement(By.xpath("//span[@class='select2-chosen' and text()='Укажите организацию']"))
                 .click();
         Assertions.assertTrue(driver
                 .findElement(By.xpath("//span[@class='select2-arrow']")).isDisplayed());
-        driverWait.until(ExpectedConditions.invisibilityOf(driver
-                .findElement(By.xpath("//li[@class='select2-searching']"))));
+        waitInvisibilityOfElement(By.xpath("//li[@class='select2-searching']"));
 
 
         WebElement orgResult = driver.findElement(By.xpath("//ul[@class='select2-results']/li[1]"));
@@ -126,23 +121,23 @@ public class TestTask1 {
         LocalDate endDate = LocalDate.parse("26.06.2022", formatter);
 
         setField(departureDateField, startDate.format(formatter) + Keys.ESCAPE);
-        driverWait.until(ExpectedConditions.invisibilityOf(datePicker));
+        waitInvisibilityOfElement(datePicker);
         setField(arrivalDateField, endDate.format(formatter) + Keys.ESCAPE);
-        driverWait.until(ExpectedConditions.invisibilityOf(datePicker));
+        waitInvisibilityOfElement(datePicker);
         Assertions.assertEquals(ChronoUnit.DAYS.between(startDate, endDate) + 1, Long.parseLong(driver
                 .findElement(By.xpath("//span[@id='duration-plan']")).getText()));
 
         //Шаг 9-10
         driver.findElement(By
                 .xpath("//button[@type='submit' and contains(@class, 'success action')]")).click();
-        waitSpinner();
+        waitInvisibilityOfElement(spinner);
         Assertions.assertTrue(driver
                 .findElement(By.xpath("//span[@class='validation-failed']")).isDisplayed());
     }
 
     @AfterEach
     public void quit() {
-        //  driver.quit();
+        driver.quit();
     }
 
     public void setField(WebElement e, String s) {
@@ -151,8 +146,20 @@ public class TestTask1 {
         e.sendKeys(s);
     }
 
-    public void waitSpinner() {
-        driverWait.until(ExpectedConditions.invisibilityOf(driver
-                .findElement(By.xpath("//div[@class='loader-content']"))));
+
+    public void waitVisibilityOfElement(By by) {
+        driverWait.until(ExpectedConditions.visibilityOf(driver.findElement(by)));
+    }
+
+    public void waitVisibilityOfElement(WebElement e) {
+        driverWait.until(ExpectedConditions.visibilityOf(e));
+    }
+
+    public void waitInvisibilityOfElement(By by) {
+        driverWait.until(ExpectedConditions.invisibilityOf(driver.findElement(by)));
+    }
+
+    public void waitInvisibilityOfElement(WebElement e) {
+        driverWait.until(ExpectedConditions.invisibilityOf(e));
     }
 }
