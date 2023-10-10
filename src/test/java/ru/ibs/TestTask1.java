@@ -21,7 +21,7 @@ public class TestTask1 {
     static WebDriver driver;
     WebDriverWait driverWait;
     final String baseUrl = "http://training.appline.ru/user/login";
-    final String login = "Irina Filippova";
+    private final String login = "Irina Filippova";
     final String password = "testing";
 
 
@@ -56,18 +56,15 @@ public class TestTask1 {
                 .findElement(By.xpath("./ancestor::li/ul"))));
 
         driver.findElement(By.xpath("//span[text()='Командировки']")).click();
-        WebElement loaderSpinner = driver
-                .findElement(By.xpath("//div[@class='loader-content']"));
-        driverWait.until(ExpectedConditions.invisibilityOf(loaderSpinner));
+        waitSpinner();
 
-        //Шаг 5
+        //Шаг 5-6
         driver.findElement(By.xpath("//a[@title='Создать командировку']")).click();
-
-        driverWait.until(ExpectedConditions.invisibilityOf(loaderSpinner));
+        waitSpinner();
         Assertions.assertTrue(driver
                 .findElement(By.xpath("//h1[@class='user-name']")).isDisplayed());
 
-        //Заполнение полей на форме
+        //Шаг 7-8
         WebElement depSelector = driver
                 .findElement(By.xpath("//select[contains(@id, 'crm_business_trip_businessUnit-uid')]"));
         depSelector.click();
@@ -109,17 +106,13 @@ public class TestTask1 {
         checkBox.click();
         Assertions.assertTrue(checkBox.isSelected());
 
-// хз как проверить эти поля
         WebElement departureField = driver
                 .findElement(By.xpath("//input[contains(@id, 'crm_business_trip_departureCity')]"));
-        departureField.click();
-        departureField.sendKeys(Keys.CONTROL + "A");
-        departureField.sendKeys("Test 123");
+        setField(departureField, "Test 123");
 
         WebElement arrivalField = driver
                 .findElement(By.xpath("//input[contains(@id, 'crm_business_trip_arrivalCity')]"));
-        arrivalField.click();
-        arrivalField.sendKeys("Hello world");
+        setField(arrivalField, "Hello world!");
 
         WebElement departureDateField = driver
                 .findElement(By.xpath("//input[contains(@id, 'date_selector_crm_business_trip_depart')]"));
@@ -132,24 +125,34 @@ public class TestTask1 {
         LocalDate startDate = LocalDate.parse("29.05.2022", formatter);
         LocalDate endDate = LocalDate.parse("26.06.2022", formatter);
 
-        departureDateField.click();
-        departureDateField.sendKeys(startDate.format(formatter) + Keys.ESCAPE);
+        setField(departureDateField, startDate.format(formatter) + Keys.ESCAPE);
         driverWait.until(ExpectedConditions.invisibilityOf(datePicker));
-        arrivalDateField.click();
-        arrivalDateField.sendKeys(endDate.format(formatter) + Keys.ESCAPE);
+        setField(arrivalDateField, endDate.format(formatter) + Keys.ESCAPE);
         driverWait.until(ExpectedConditions.invisibilityOf(datePicker));
         Assertions.assertEquals(ChronoUnit.DAYS.between(startDate, endDate) + 1, Long.parseLong(driver
                 .findElement(By.xpath("//span[@id='duration-plan']")).getText()));
 
+        //Шаг 9-10
         driver.findElement(By
                 .xpath("//button[@type='submit' and contains(@class, 'success action')]")).click();
-        driverWait.until(ExpectedConditions.invisibilityOf(loaderSpinner));
+        waitSpinner();
         Assertions.assertTrue(driver
                 .findElement(By.xpath("//span[@class='validation-failed']")).isDisplayed());
     }
 
     @AfterEach
     public void quit() {
-        //driver.quit();
+        //  driver.quit();
+    }
+
+    public void setField(WebElement e, String s) {
+        e.click();
+        e.sendKeys(Keys.CONTROL + "A");
+        e.sendKeys(s);
+    }
+
+    public void waitSpinner() {
+        driverWait.until(ExpectedConditions.invisibilityOf(driver
+                .findElement(By.xpath("//div[@class='loader-content']"))));
     }
 }
