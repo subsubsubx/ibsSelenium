@@ -11,9 +11,6 @@ public class MainPage extends BasePage {
 
     PageManager pageManager = PageManager.getPageManager();
 
-    @FindBy(xpath = "//h1[@class='oro-subtitle']")
-    private WebElement subtitle;
-
     @FindBy(xpath = "//ul[contains(@class, 'main-menu')]/li/a/span")
     private List<WebElement> navBarList;
 
@@ -49,5 +46,4 @@ public class MainPage extends BasePage {
         return pageManager.getAssignmentPage();
 
     }
-
 }

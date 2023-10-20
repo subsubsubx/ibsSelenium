@@ -6,16 +6,61 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class AssignmentFormPage extends BasePage {
 
     @FindBy(xpath = "//h1[@class='user-name']")
     private WebElement createAssignmentTitle;
 
-    @FindBy(name = "crm_business_trip[businessUnit]")
+    @FindBy(xpath = "//select[contains(@id, 'crm_business_trip_businessUnit')]")
     private WebElement departmentSelector;
 
     @FindBy(xpath = "//a[@id='company-selector-show']")
     private WebElement orgButton;
+
+    @FindBy(xpath = "//div[@id='company-selector']")
+    private WebElement orgSelector;
+
+    @FindBy(xpath = "//span[@class='select2-chosen' and text()='Укажите организацию']")
+    private WebElement chooseAnOrg;
+
+    @FindBy(xpath = "//span[@class='select2-chosen']")
+    private WebElement chosenElement;
+
+    @FindBy(xpath = "//ul[@class='select2-results']//li[@class='select2-results-dept-0 select2-result select2-result-selectable']//div")
+    private List<WebElement> orgList;
+
+    @FindBy(xpath = "//input[@type='checkbox']")
+    private List<WebElement> checkboxList;
+
+    @FindBy(xpath = "//input[contains(@id, 'crm_business_trip_departureCity')]")
+    private WebElement departureCityInputField;
+
+    @FindBy(xpath = "//input[contains(@id, 'crm_business_trip_arrivalCity')]")
+    private WebElement arrivalCityInputField;
+
+    @FindBy(xpath = "//input[contains(@id, 'date_selector_crm_business_trip_depart')]")
+    private WebElement departureDateField;
+
+    @FindBy(xpath = "//input[contains(@id, 'date_selector_crm_business_trip_return')]")
+    private WebElement arrivalDateField;
+
+    @FindBy(xpath = "//div[@id='ui-datepicker-div']")
+    private WebElement datePicker;
+
+    @FindBy(xpath = "//span[@id='duration-plan']")
+    private WebElement durationPlan;
+
+    @FindBy(xpath = "//button[@type='submit' and contains(@class, 'success action')]")
+    private WebElement closeAndSaveButton;
+
+    @FindBy(xpath = "//span[@class='validation-failed']")
+    private WebElement validationFailed;
 
     public AssignmentFormPage checkOpenAssignmentPage() {
         waitInvisibilityOfElement(loadingSpinner);
@@ -27,15 +72,60 @@ public class AssignmentFormPage extends BasePage {
         departmentSelector.click();
         Assert.assertEquals("selector input-widget-select focus hover", departmentSelector
                 .findElement(By.xpath("./..")).getAttribute("class"));
-        departmentSelector.findElement(By.xpath("./option[@value='7']")).click();
+        waitClickability(departmentSelector.findElement(By.xpath("./option[@value='7']"))).click();
         Assert.assertEquals("Отдел внутренней разработки", departmentSelector
                 .findElement(By.xpath("./../span")).getText());
-        departmentSelector.sendKeys(Keys.ESCAPE);
         return this;
     }
 
     public AssignmentFormPage fillOrgFromList() {
+        waitVisibilityOfElement(orgButton).click();
+        Assert.assertEquals("display: block;", orgSelector.getAttribute("style"));
+        waitVisibilityOfElement(chooseAnOrg).click();
+        waitVisibilityOfElements(orgList);
+        WebElement chosenRand = orgList.get(ThreadLocalRandom.current().nextInt(0, orgList.size()));
+        String s = chosenRand.getText(); // хз как обойти StaleElementException
+        chosenRand.click();
+        Assert.assertEquals("Значения не совпадают", s, chosenElement.getText());
+        return this;
+    }
 
+    public AssignmentFormPage tickCheckboxFromList(int num) {
+        waitVisibilityOfElements(checkboxList);
+        checkboxList.get(num - 1).click();
+        Assert.assertTrue(checkboxList.get(num - 1).isSelected());
+        return this;
+    }
+
+    public AssignmentFormPage fillDepartureCity(String s) {
+        waitVisibilityOfElement(departureCityInputField);
+        setField(departureCityInputField, s);
+        return this;
+    }
+
+    public AssignmentFormPage fillArrivalCity(String s) {
+        waitVisibilityOfElement(arrivalCityInputField);
+        setField(arrivalCityInputField, s);
+        return this;
+    }
+
+    public AssignmentFormPage setDepartureAndArrivalDates() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate startDate = LocalDate.parse("29.05.2022", formatter);
+        LocalDate endDate = LocalDate.parse("26.06.2022", formatter);
+        setField(departureDateField, startDate.format(formatter) + Keys.ESCAPE);
+        waitInvisibilityOfElement(datePicker);
+        setField(arrivalDateField, endDate.format(formatter) + Keys.ESCAPE);
+        waitInvisibilityOfElement(datePicker);
+        Assert.assertEquals(ChronoUnit.DAYS
+                .between(startDate, endDate) + 1, Long.parseLong(durationPlan.getText()));
+        return this;
+    }
+
+    public AssignmentFormPage clickCloseAndSave() {
+        waitClickability(closeAndSaveButton).click();
+        waitInvisibilityOfElement(loadingSpinner);
+        Assert.assertTrue(validationFailed.isDisplayed());
         return this;
     }
 

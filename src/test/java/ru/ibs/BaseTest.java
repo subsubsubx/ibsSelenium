@@ -12,13 +12,7 @@ import ru.ibs.framework.pages.BasePage;
 
 
 public class BaseTest extends BasePage {
-    public static void main(String[] args) {
-        System.out.println(DriverEnums.BASE_URL.getValue());
-    }
-
-
     private final DriverManager driverManager = DriverManager.getDriverManager();
-    //   private final PropertyManager propertyManager = PropertyManager.getPropInstance();
 
     @BeforeClass
     public static void beforeAll() {
@@ -32,7 +26,7 @@ public class BaseTest extends BasePage {
 
     @AfterClass
     public static void afterAll() {
-        //   InitManager.quitFramework();
+        InitManager.quitFramework();
     }
 
     @Test
@@ -44,6 +38,12 @@ public class BaseTest extends BasePage {
                 .checkAssignmentPage()
                 .openAssignmentFormPage()
                 .checkOpenAssignmentPage()
-                .fillDepartment();
+                .fillDepartment()
+                .fillOrgFromList()
+                .tickCheckboxFromList(1)
+                .fillDepartureCity("Не кури")
+                .fillArrivalCity("Не пей")
+                .setDepartureAndArrivalDates()
+                .clickCloseAndSave();
     }
 }
