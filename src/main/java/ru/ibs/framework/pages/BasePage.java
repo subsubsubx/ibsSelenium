@@ -1,5 +1,6 @@
 package ru.ibs.framework.pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -50,6 +51,7 @@ public class BasePage {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    @Step("Установка в поле {e} значения {s}")
     protected WebElement setField(WebElement e, String s) {
         e.click();
         e.sendKeys(Keys.CONTROL + "A");

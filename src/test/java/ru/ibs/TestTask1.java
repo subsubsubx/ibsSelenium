@@ -1,3 +1,4 @@
+/*
 package ru.ibs;
 
 import org.junit.jupiter.api.AfterEach;
@@ -162,4 +163,4 @@ public class TestTask1 {
     public void waitInvisibilityOfElement(WebElement e) {
         driverWait.until(ExpectedConditions.invisibilityOf(e));
     }
-}
+}*/

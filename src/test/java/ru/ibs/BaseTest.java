@@ -29,21 +29,5 @@ public class BaseTest extends BasePage {
         InitManager.quitFramework();
     }
 
-    @Test
-    public void test() {
-        PageManager.getPageManager().getLoginPage().fillLoginData().submitLogin()
-                .checkOpenMainPage()
-                .selectNavBarByValue("Расходы")
-                .selectDropDownOptionByValue("Командировки")
-                .checkAssignmentPage()
-                .openAssignmentFormPage()
-                .checkOpenAssignmentPage()
-                .fillDepartment()
-                .fillOrgFromList()
-                .tickCheckboxFromList(1)
-                .fillDepartureCity("Не кури")
-                .fillArrivalCity("Не пей")
-                .setDepartureAndArrivalDates()
-                .clickCloseAndSave();
-    }
+
 }

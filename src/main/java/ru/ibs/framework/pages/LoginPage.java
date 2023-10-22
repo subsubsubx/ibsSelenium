@@ -1,6 +1,7 @@
 package ru.ibs.framework.pages;
 
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.ibs.framework.enums.DriverEnums;
@@ -22,6 +23,8 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//button[@name='_submit']")
     private WebElement submitButton;
 
+
+    @Step("Заполнение логина валидными данными")
     public LoginPage fillLoginData() {
         waitVisibilityOfElement(loginForm);
         setField(usernameField, DriverEnums.LOGIN.getValue());
@@ -29,6 +32,7 @@ public class LoginPage extends BasePage {
         return this;
     }
 
+    @Step("Клик на логин")
     public MainPage submitLogin() {
         submitButton.click();
         return pageManager.getMainPage();
