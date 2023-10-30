@@ -27,6 +27,7 @@ public class MainPage extends BasePage {
     }
 
     public MainPage selectNavBarByValue(String s) {
+        System.out.println(navBarList.size());
         for (WebElement element : navBarList) {
             if (element.getText().equals(s)) {
                 waitClickability(element).click();
@@ -39,6 +40,7 @@ public class MainPage extends BasePage {
 
 
     public AssignmentPage selectDropDownOptionByValue(String s) {
+        System.out.println(dropDownOptionsList.size());
         for (WebElement element : dropDownOptionsList) {
             if (element.getText().equals(s)) {
                 waitVisibilityOfElement(element).click();

@@ -63,7 +63,7 @@ public class AssignmentFormPage extends BasePage {
     @FindBy(xpath = "//span[@class='validation-failed']")
     private WebElement validationFailed;
 
-    @Step("Проверка открытия страницы с формой заполнения командировки")
+//    @Step("Проверка открытия страницы с формой заполнения командировки")
     public AssignmentFormPage checkOpenAssignmentPage() {
         waitInvisibilityOfElement(loadingSpinner);
         Assert.assertEquals("Некорректное значение", "Создать командировку", createAssignmentTitle
@@ -71,7 +71,7 @@ public class AssignmentFormPage extends BasePage {
         return this;
     }
 
-    @Step("Заполнение департамента")
+ //   @Step("Заполнение департамента")
     public AssignmentFormPage fillDepartment() {
         departmentSelector.click();
         Assert.assertEquals("selector input-widget-select focus hover", departmentSelector
@@ -82,7 +82,7 @@ public class AssignmentFormPage extends BasePage {
         return this;
     }
 
-    @Step("Выбор рандомной организации из селектора")
+ //   @Step("Выбор рандомной организации из селектора")
     public AssignmentFormPage fillOrgFromList() {
         waitVisibilityOfElement(orgButton).click();
         Assert.assertEquals("display: block;", orgSelector.getAttribute("style"));
@@ -95,26 +95,26 @@ public class AssignmentFormPage extends BasePage {
         return this;
     }
 
-    @Step("Проставление чекбокса под номером {num} напротив задач")
+//    @Step("Проставление чекбокса под номером {num} напротив задач")
     public AssignmentFormPage tickCheckboxFromList(int num) {
         try {
             waitVisibilityOfElements(checkboxList);
             checkboxList.get(num - 1).click();
             Assert.assertTrue(checkboxList.get(num - 1).isSelected());
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             Assert.fail("Выход за пределы массива, " + e.getMessage());
         }
         return this;
     }
 
-    @Step("Заполнение города отправки значением {s}")
+//    @Step("Заполнение города отправки значением {s}")
     public AssignmentFormPage fillDepartureCity(String s) {
         waitVisibilityOfElement(departureCityInputField);
         setField(departureCityInputField, s);
         return this;
     }
 
-    @Step("Заполнение города прибытия {s}")
+ //   @Step("Заполнение города прибытия {s}")
     public AssignmentFormPage fillArrivalCity(String s) {
         waitVisibilityOfElement(arrivalCityInputField);
         setField(arrivalCityInputField, s);
@@ -122,7 +122,7 @@ public class AssignmentFormPage extends BasePage {
     }
 
 
-    @Step("Проверка полей с выбором дат")
+   // @Step("Проверка полей с выбором дат")
     public AssignmentFormPage setDepartureAndArrivalDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate startDate = LocalDate.parse("29.05.2022", formatter);
@@ -136,7 +136,7 @@ public class AssignmentFormPage extends BasePage {
         return this;
     }
 
-    @Step("Клик \"Сохранить и закрыть\"")
+ //   @Step("Клик \"Сохранить и закрыть\"")
     public AssignmentFormPage clickCloseAndSave() {
         waitClickability(closeAndSaveButton).click();
         waitInvisibilityOfElement(loadingSpinner);

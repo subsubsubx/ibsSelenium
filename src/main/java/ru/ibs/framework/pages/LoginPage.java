@@ -24,15 +24,15 @@ public class LoginPage extends BasePage {
     private WebElement submitButton;
 
 
-    @Step("Заполнение логина валидными данными")
-    public LoginPage fillLoginData() {
+  //  @Step("Заполнение логина валидными данными")
+    public LoginPage fillLoginData(String id, String pwd) {
         waitVisibilityOfElement(loginForm);
-        setField(usernameField, DriverEnums.LOGIN.getValue());
-        setField(passwordField, DriverEnums.PASSWORD.getValue());
+        setField(usernameField, id);
+        setField(passwordField, pwd);
         return this;
     }
 
-    @Step("Клик на логин")
+ //   @Step("Клик на логин")
     public MainPage submitLogin() {
         submitButton.click();
         return pageManager.getMainPage();

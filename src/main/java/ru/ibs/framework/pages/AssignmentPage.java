@@ -13,14 +13,14 @@ public class AssignmentPage extends BasePage {
     @FindBy(xpath = "//a[@title='Создать командировку']")
     private WebElement createAssignmentButton;
 
-    @Step("Проверка открытия страницы с командировками")
+ //   @Step("Проверка открытия страницы с командировками")
     public AssignmentPage checkAssignmentPage() {
         waitInvisibilityOfElement(loadingSpinner);
         Assert.assertEquals("Значения не совпадают", "Все Командировки", subtitle.getText());
         return this;
     }
 
-    @Step("Клик \"Создать командировку\"")
+   // @Step("Клик \"Создать командировку\"")
     public AssignmentFormPage openAssignmentFormPage() {
         createAssignmentButton.click();
         waitInvisibilityOfElement(loadingSpinner);

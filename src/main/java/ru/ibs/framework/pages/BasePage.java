@@ -51,7 +51,7 @@ public class BasePage {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    @Step("Установка в поле {e} значения {s}")
+  //  @Step("Установка в поле {e} значения {s}")
     protected WebElement setField(WebElement e, String s) {
         e.click();
         e.sendKeys(Keys.CONTROL + "A");

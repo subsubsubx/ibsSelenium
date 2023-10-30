@@ -3,11 +3,9 @@ package ru.ibs;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import ru.ibs.framework.enums.DriverEnums;
 import ru.ibs.framework.managers.DriverManager;
 import ru.ibs.framework.managers.InitManager;
-import ru.ibs.framework.managers.PageManager;
 import ru.ibs.framework.pages.BasePage;
 
 

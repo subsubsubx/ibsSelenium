@@ -26,6 +26,7 @@
         <allure-junit4.version>2.23.0</allure-junit4.version>
         <allure-maven.version>2.12.0</allure-maven.version>
         <aspectj.version>1.9.7</aspectj.version>
+        <cucumber.version>7.11.0</cucumber.version>
     </properties>
 
     <dependencies>
@@ -40,6 +41,18 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-junit4 -->
@@ -72,11 +85,13 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
-                    <includes>**/*Test.java</includes>
+<!--                    <includes>**/*Test.java</includes>-->
+                    <includes>**/*CucumberRunner.java</includes>
                     <argLine>
                         -Xmx1024m
                         -Dfile.encoding=${encoding.type}
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        -Dcucumber.options="--plugin io.qameta.allure.cucumber4jvm.AllureCucumber4Jvm"
                     </argLine>
                     <properties>
                         <property>
@@ -85,7 +100,8 @@
                         </property>
                     </properties>
                     <systemPropertyVariables>
-                        <allure.results.directory>${project.build.directory}/reports/allure-results</allure.results.directory>
+                        <allure.results.directory>${project.build.directory}/reports/allure-results
+                        </allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>
