@@ -2,6 +2,7 @@ package ru.ibs.framework.steps;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.junit.Assert;
 import ru.ibs.framework.managers.PageManager;
 import ru.ibs.framework.pages.LoginPage;
 import ru.ibs.framework.pages.MainPage;

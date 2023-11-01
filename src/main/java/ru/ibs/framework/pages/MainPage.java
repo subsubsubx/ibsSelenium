@@ -2,6 +2,7 @@ package ru.ibs.framework.pages;
 
 import io.qameta.allure.Step;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.ibs.framework.managers.PageManager;
@@ -18,10 +19,12 @@ public class MainPage extends BasePage {
     @FindBy(xpath = "//ul[contains(@class, 'dropdown-menu')]/li/a/span")
     private List<WebElement> dropDownOptionsList;
 
-@Step("")
+    @Step("")
     public MainPage checkOpenMainPage() {
+        Assert.assertFalse(driverManager.getDriver().findElement(By
+                .xpath("//div[@class='alert alert-error']")).isDisplayed());
         waitVisibilityOfElement(subtitle);
-        Assert.assertEquals("Страница не открыта, элемент не найден","Панель быстрого запуска", subtitle
+        Assert.assertEquals("Страница не открыта, элемент не найден", "Панель быстрого запуска", subtitle
                 .getText());
         return this;
     }

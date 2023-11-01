@@ -23,7 +23,7 @@ public class Hooks {
         try {
             if (scenario.isFailed()) {
                 byte[] screenshot = ((TakesScreenshot) driverManager.getDriver()).getScreenshotAs(OutputType.BYTES);
-                scenario.attach(screenshot, "image/png", "Screenshot" + UUID.randomUUID());
+                scenario.embed(screenshot, "image/png", "Screenshot" + UUID.randomUUID());
             }
         } catch (Exception e) {
             e.printStackTrace();
