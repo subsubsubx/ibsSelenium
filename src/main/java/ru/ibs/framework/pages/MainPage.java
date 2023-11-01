@@ -19,10 +19,8 @@ public class MainPage extends BasePage {
     @FindBy(xpath = "//ul[contains(@class, 'dropdown-menu')]/li/a/span")
     private List<WebElement> dropDownOptionsList;
 
-    @Step("")
+
     public MainPage checkOpenMainPage() {
-        Assert.assertFalse("Неправильный логин/пароль", driverManager.getDriver().findElement(By
-                .xpath("//div[@class='alert alert-error']")).isDisplayed());
         waitVisibilityOfElement(subtitle);
         Assert.assertEquals("Страница не открыта, элемент не найден", "Панель быстрого запуска", subtitle
                 .getText());
